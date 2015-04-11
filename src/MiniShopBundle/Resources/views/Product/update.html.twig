@@ -1,0 +1,20 @@
+{% extends 'MiniShopBundle::layout.html.twig' %}
+
+{% block title %}{{ title }}{% endblock title %}
+
+{% block headline %}
+    {{ title }}
+{% endblock headline %}
+
+{% block javascript_append %}
+    {% javascripts '@MiniShopBundle/Resources/public/js/product.js' %}
+    <script src="{{ asset_url }}"></script>
+    {% endjavascripts %}
+{% endblock javascript_append %}
+
+{% block content_row %}
+    {{ form_start(form) }}
+    {{ form_widget(form) }}
+    {{ form_end(form) }}
+{% endblock content_row %}
+

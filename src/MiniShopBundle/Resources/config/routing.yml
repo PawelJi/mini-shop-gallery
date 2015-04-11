@@ -1,0 +1,31 @@
+mini_shop_homepage:
+    path:     /
+    defaults: { _controller: MiniShopBundle:Default:index }
+mini_shop_product_list:
+    path: /product/list/{page}
+    defaults: { _controller: MiniShopBundle:Product:index, page: 1 }
+    requirements:
+        page:  \d+
+mini_shop_product_create:
+    path: /product/create
+    defaults: { _controller: MiniShopBundle:Product:create }
+mini_shop_product_show:
+    path: /product/show/{id}
+    defaults: { _controller: MiniShopBundle:Product:show }
+    requirements:
+        id:  \d+
+mini_shop_product_update:
+    path: /product/edit/{id}
+    defaults: { _controller: MiniShopBundle:Product:update }
+    requirements:
+        id:  \d+
+mini_shop_product_remove:
+    path: /product/delete/{id}
+    defaults: { _controller: MiniShopBundle:Product:remove }
+    requirements:
+        id:  \d+
+mini_shop_product_buy:
+    path: /product/buy/{id}
+    defaults: { _controller: MiniShopBundle:Product:buy }
+    requirements:
+        id:  \d+

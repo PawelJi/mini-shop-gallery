@@ -1,0 +1,22 @@
+MiniShopBundle\Entity\Photo:
+    type: entity
+    repositoryClass: MiniShopBundle\Entity\PhotoRepository
+    table: photo
+    id:
+        id:
+            type: integer
+            generator: { strategy: AUTO }
+    fields:
+        filename:
+            type: string
+            length: 255
+    image:
+        mapping:           product_image
+        filename_property: filename
+    manyToOne:
+        product:
+            targetEntity: Product
+            inversedBy: photos
+            joinColumn:
+                name: product_id
+                referencedColumnName: id

@@ -1,0 +1,117 @@
+{% extends 'MiniShopBundle::layout.html.twig' %}
+
+{% block javascript_append %}
+    {% javascripts '@MiniShopBundle/Resources/public/js/list.js' %}
+    <script src="{{ asset_url }}"></script>
+    {% endjavascripts %}
+{% endblock javascript_append %}
+
+{% block title %}{{ title }}{% endblock title %}
+
+{% block headline %}
+    {{ title }}
+{% endblock headline %}
+
+{% block content_row %}
+
+    <div class="count">
+        <div class="pull-left">
+            Total results: {{ pagination.getTotalItemCount }}
+        </div>
+
+        {% if is_granted('ROLE_ADMIN') %}
+        <div class="pull-right">
+            <a class="btn btn-primary btn-success" href="{{ path('mini_shop_product_create') }}">
+                <i class="glyphicon glyphicon-plus"></i>
+                Create product
+            </a>
+        </div>
+        {% endif %}
+    </div>
+
+    <div class="clear"></div>
+
+    <table class="table table-striped">
+        <tr>
+            {# sorting of properties based on query components #}
+            <th>{{ knp_pagination_sortable(pagination, 'Id', 'p.id') }}</th>
+            {% if is_granted('ROLE_ADMIN') %}
+            <th>Photo</th>
+            {% endif %}
+            <th{% if pagination.isSorted('p.title') %} class="sorted"{% endif %}>{{ knp_pagination_sortable(pagination, 'Title', 'p.title') }}</th>
+            <th{% if pagination.isSorted('p.price') %} class="sorted"{% endif %}>{{ knp_pagination_sortable(pagination, 'Price', 'p.price') }}</th>
+            <th{% if pagination.isSorted('p.description') %} class="sorted"{% endif %}>{{ knp_pagination_sortable(pagination, 'Description', 'p.description') }}</th>
+            <th>Actions</th>
+        </tr>
+
+        {# table body #}
+        {% for product in pagination %}
+            <tr {% if loop.index is odd %}class="color"{% endif %}>
+                <td>{{ product.id }}</td>
+                {% if is_granted('ROLE_ADMIN') %}
+                <td>
+                    {% if product.photos.count %}
+                        {% for photo in product.photos %}
+                            <a href="{{ vich_uploader_asset(photo, 'imageFile') }}">
+                                <img src="{{ vich_uploader_asset(photo, 'imageFile') | imagine_filter('thumb') }}" />
+                            </a>
+                        {% endfor %}
+                    {% else %}
+                        No files appended.
+                    {% endif %}
+                </td>
+                {% endif %}
+                <td>{{ product.title }}</td>
+                <td>{{ product.price }}</td>
+                <td>{{ product.description }}</td>
+                <td>
+                    <a href="{{ path('mini_shop_product_show', {'id': product.id}) }}">
+                        <i class="glyphicon glyphicon-eye-open"></i>
+                        show
+                    </a>
+
+                    {% if not is_granted('ROLE_ADMIN') %}
+                        <a href="{{ path('mini_shop_product_buy', {'id': product.id}) }}">
+                            <i class="glyphicon glyphicon-shopping-cart"></i>
+                            buy
+                        </a>
+                    {% endif %}
+
+                    {% if is_granted('ROLE_ADMIN') %}
+                    <a href="{{ path('mini_shop_product_update', {'id': product.id}) }}">
+                        <i class="glyphicon glyphicon-edit"></i>
+                        edit
+                    </a>
+                    <a class="jq_remove" href="{{ path('mini_shop_product_remove', {'id': product.id}) }}">
+                        <i class="glyphicon glyphicon-trash"></i>
+                        delete
+                    </a>
+                    {% endif %}
+                </td>
+            </tr>
+        {% endfor %}
+    </table>
+    {# display navigation #}
+    <div class="navigation">
+        {{ knp_pagination_render(pagination) }}
+    </div>
+
+    <div id="confirm" class="modal fade">
+        <div class="modal-dialog">
+            <div class="modal-content">
+                <div class="modal-header">
+                    <button type="button" class="close" data-dismiss="modal" aria-label="Close"><span aria-hidden="true">&times;</span></button>
+                    <h4 class="modal-title">Confirm your decision</h4>
+                </div>
+                <div class="modal-body">
+                    <p>Are you sure to delete product?</p>
+                </div>
+                <div class="modal-footer">
+                    <button type="button" class="btn btn-default" data-dismiss="modal">Cancel</button>
+                    <button type="button" class="btn btn-primary" id="delete">Delete</button>
+                </div>
+            </div><!-- /.modal-content -->
+        </div><!-- /.modal-dialog -->
+    </div><!-- /.modal -->
+
+{% endblock content_row %}

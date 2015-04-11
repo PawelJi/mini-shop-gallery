@@ -1,0 +1,9 @@
+MiniShopBundle\Entity\User:
+    type:  entity
+    repositoryClass: MiniShopBundle\Entity\UserRepository
+    table: fos_user
+    id:
+        id:
+            type: integer
+            generator:
+                strategy: AUTO

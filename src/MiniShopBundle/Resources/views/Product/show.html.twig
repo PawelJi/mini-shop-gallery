@@ -1,0 +1,38 @@
+{% extends 'MiniShopBundle::layout.html.twig' %}
+
+{% block title %}{{ title }}{% endblock title %}
+
+{% block headline %}
+    {{ title }}
+{% endblock headline %}
+
+{% block content_row %}
+    <table class="table table-striped">
+        <tr>
+            <td>Title</td>
+            <td>{{ product.title }}</td>
+        </tr>
+        <tr>
+            <td>Description</td>
+            <td>{{ product.description }}</td>
+        </tr>
+        <tr>
+            <td>Price</td>
+            <td>{{ product.price }}</td>
+        </tr>
+        <tr>
+            <td colspan="2">
+                {% if product.photos.count %}
+                    {% for photo in product.photos %}
+                        <a href="{{ vich_uploader_asset(photo, 'imageFile') }}">
+                            <img src="{{ vich_uploader_asset(photo, 'imageFile') | imagine_filter('thumb') }}" />
+                        </a>
+                    {% endfor %}
+                {% else %}
+                    No files appended.
+                {% endif %}
+            </td>
+        </tr>
+    </table>
+{% endblock content_row %}
+
